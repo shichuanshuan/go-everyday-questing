@@ -1,36 +1,39 @@
 为什么选 B 呢？我想借助一个例子讲解。
-
+```go
 package main
 
 import (
-	"encoding/json"
-  "fmt"
+"encoding/json"
+"fmt"
 )
 
 type Person struct {
-  name  string
-  hobby string
-}	
+name  string
+hobby string
+}
 
 func main() {
-  person := Person{name: "polarisxu", hobby: "Golang"}
-  m, _ := json.Marshal(person)
-  fmt.Printf("%s", m)
+person := Person{name: "polarisxu", hobby: "Golang"}
+m, _ := json.Marshal(person)
+fmt.Printf("%s", m)
 }
+```
 如果你认为输出 {"name":"polarisxu","hobby":"Golang"}，那你得去补补 encoding/json 包的知识了。要想输出 {"name":"polarisxu","hobby":"Golang”}，一般我们会这么做：将 Person 的字段导出，同时设置上 tag。
-
+```go
 type Person struct {
   Name  string `json:"name"`
   Hobby string `json:"hobby"`
 }
+```
 但如果我们不想导出 Person 的字段呢？可以通过实现 Marshaler 来做到。
 
 func (p Person) MarshalJSON() ([]byte, error) {
 	return []byte(`{"name":"`+p.name+`","hobby":"`+p.hobby+`"}`), nil
 }
-02
+
 回到题目上，time.Time 是什么类型？
 
+```go
 type Time struct {
     // contains filtered or unexported fields
 }
@@ -51,6 +54,7 @@ func (t Time) MarshalJSON() ([]byte, error) {
 	b = append(b, '"')
 	return b, nil
 }
+```
 这么说，答案不应该就是 A 吗？别急。
 
 03
